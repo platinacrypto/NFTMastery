@@ -1,0 +1,137 @@
+# NFTMastery.py
+
+import json
+import random
+from typing import List, Dict
+
+class NFTMastery:
+    def __init__(self, platform_name: str):
+        self.platform_name = platform_name
+        self.nft_collections = {}
+
+    def display_platform_info(self):
+        """Displays the platform name."""
+        print(f"Platform Name: {self.platform_name}")
+
+    def add_collection(self, collection_name: str):
+        """
+        Adds a new NFT collection to the platform.
+        """
+        if collection_name in self.nft_collections:
+            print(f"Collection '{collection_name}' already exists.")
+            return
+        
+        self.nft_collections[collection_name] = {
+            'nfts': {}
+        }
+        print(f"Collection '{collection_name}' added successfully.")
+
+    def add_nft(self, collection_name: str, nft_id: str, metadata: Dict):
+        """
+        Adds a new NFT to a specified collection.
+        """
+        if collection_name not in self.nft_collections:
+            print(f"Collection '{collection_name}' does not exist.")
+            return
+
+        if nft_id in self.nft_collections[collection_name]['nfts']:
+            print(f"NFT with ID '{nft_id}' already exists in collection '{collection_name}'.")
+            return
+
+        self.nft_collections[collection_name]['nfts'][nft_id] = metadata
+        print(f"NFT with ID '{nft_id}' added to collection '{collection_name}'.")
+
+    def get_nft_info(self, collection_name: str, nft_id: str) -> Dict:
+        """
+        Retrieves information about a specific NFT.
+        """
+        if collection_name not in self.nft_collections:
+            print(f"Collection '{collection_name}' does not exist.")
+            return {}
+
+        if nft_id not in self.nft_collections[collection_name]['nfts']:
+            print(f"NFT with ID '{nft_id}' does not exist in collection '{collection_name}'.")
+            return {}
+
+        return self.nft_collections[collection_name]['nfts'][nft_id]
+
+    def get_collection_info(self, collection_name: str) -> Dict:
+        """
+        Retrieves information about a specific NFT collection.
+        """
+        if collection_name not in self.nft_collections:
+            print(f"Collection '{collection_name}' does not exist.")
+            return {}
+
+        return self.nft_collections[collection_name]
+
+    def estimate_nft_value(self, collection_name: str, nft_id: str) -> float:
+        """
+        Estimates the value of an NFT based on random factors.
+        """
+        if collection_name not in self.nft_collections:
+            print(f"Collection '{collection_name}' does not exist.")
+            return 0.0
+
+        if nft_id not in self.nft_collections[collection_name]['nfts']:
+            print(f"NFT with ID '{nft_id}' does not exist in collection '{collection_name}'.")
+            return 0.0
+
+        # Randomly generate a value estimate for the NFT
+        estimated_value = random.uniform(100, 10000)
+        return estimated_value
+
+    def generate_report(self) -> Dict:
+        """
+        Generates a comprehensive report of all NFT collections and their details.
+        """
+        report = {
+            'platform_name': self.platform_name,
+            'collections': self.nft_collections
+        }
+        return report
+
+    def display_report(self, report: Dict):
+        """Displays the generated report."""
+        print("Generated NFT Report:")
+        print(json.dumps(report, indent=4))
+
+# Example usage
+if __name__ == "__main__":
+    platform_name = "NFTMastery"
+    
+    # Create an instance of NFTMastery
+    nft_mastery = NFTMastery(platform_name)
+    
+    # Display platform info
+    nft_mastery.display_platform_info()
+
+    # Add collections and NFTs
+    nft_mastery.add_collection("CryptoArt")
+    nft_mastery.add_nft("CryptoArt", "nft001", {
+        'name': 'CryptoPunk #1',
+        'artist': 'Artist A',
+        'description': 'An early CryptoPunk NFT.',
+        'creation_date': '2021-01-01'
+    })
+    nft_mastery.add_nft("CryptoArt", "nft002", {
+        'name': 'CryptoPunk #2',
+        'artist': 'Artist B',
+        'description': 'Another unique CryptoPunk NFT.',
+        'creation_date': '2021-02-01'
+    })
+
+    # Get NFT and collection info
+    nft_info = nft_mastery.get_nft_info("CryptoArt", "nft001")
+    print("NFT Info:", json.dumps(nft_info, indent=4))
+
+    collection_info = nft_mastery.get_collection_info("CryptoArt")
+    print("Collection Info:", json.dumps(collection_info, indent=4))
+
+    # Estimate NFT value
+    estimated_value = nft_mastery.estimate_nft_value("CryptoArt", "nft001")
+    print(f"Estimated value for NFT 'nft001': ${estimated_value:.2f}")
+
+    # Generate and display report
+    report = nft_mastery.generate_report()
+    nft_mastery.display_report(report)
